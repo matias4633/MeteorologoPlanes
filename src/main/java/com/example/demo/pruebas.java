@@ -2,28 +2,62 @@ package com.example.demo;
 
 import enumerador.Planeta;
 import enumerador.SentidoGiro;
+import enumerador.TipoClima;
 import modelo.Coordenada;
+import modelo.Pronostico;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class pruebas {
+    private static final BigDecimal TOLERANCIA = BigDecimal.valueOf(0.1); // Tolerancia
     public static void main(String[] args) {
+        List<BigDecimal> perimetros = new ArrayList<>();
+        Coordenada coordenada4 = new Coordenada(BigDecimal.ZERO, BigDecimal.ZERO); //el Sol
+        LocalDate hoy = LocalDate.now();
+        List<Pronostico> pronosticos = new ArrayList<>();
         for (Long index = 1L ;index <=360 ; index++){
             Coordenada coordenada1 = getCoordenada(Planeta.Ferengi , BigDecimal.valueOf(index));
             Coordenada coordenada2 = getCoordenada(Planeta.Betasoide , BigDecimal.valueOf(index));
             Coordenada coordenada3 = getCoordenada(Planeta.Vulcano , BigDecimal.valueOf(index));
-            Coordenada coordenada4 = new Coordenada(BigDecimal.ZERO, BigDecimal.ZERO); //el Sol
+            Pronostico pronostico = new Pronostico();
+            pronostico.setFecha(hoy.plusDays(index));
 
             Boolean estanAlineadosEntreSi = verificarAlineacion(coordenada1,coordenada2,coordenada3);
             Boolean solDentroDelTriangulo = elSolEstaDentroDelTriangulo(coordenada1,coordenada2,coordenada3);
             Boolean estanAlineadosConElSOl = false;
+            BigDecimal perimetro = calcularPerimetro(coordenada1,coordenada2,coordenada3);
 
             //if(estanAlineadosEntreSi){
                 estanAlineadosConElSOl = verificarAlineacion(coordenada1,coordenada2,coordenada4);
             //}
+
+            if(estanAlineadosEntreSi){
+                if(estanAlineadosConElSOl){
+                    //sequia
+                    pronostico.setClima(TipoClima.SEQUIA);
+                }else{
+                    //condiciones optimas.
+                    pronostico.setClima(TipoClima.CONDICIONES_OPTIMAS);
+                }
+            }else{
+                //forman un triangulo.
+                if(solDentroDelTriangulo){
+                    //lluvia , Opt lluvia maxima.
+                    //en este caso me importa el perimetro.
+                    perimetros.add(perimetro);
+                    pronostico.setClima(TipoClima.LLUVIA);
+                }else{
+                    //codiciones Optimas , supongo, no lo aclara.
+                    pronostico.setClima(TipoClima.CONDICIONES_OPTIMAS);
+                }
+            }
+            pronosticos.add(pronostico);
             System.out.println(coordenada1);
             System.out.println(coordenada2);
             System.out.println(coordenada3);
@@ -32,13 +66,60 @@ public class pruebas {
             System.out.println("el sol esta dentro ?  : "+solDentroDelTriangulo);
             System.out.println("-----------");
         }
+        Collections.sort(perimetros , Collections.reverseOrder());
+        BigDecimal maximoPerimetro = perimetros.get(0);
+        Long diasPico = 0L;
+        for (BigDecimal p: perimetros) {
+            if(maximoPerimetro.subtract(p).abs().compareTo(TOLERANCIA)==-1){
+                diasPico++;
+            }else{
+                break;
+            }
+        }
 
+        System.out.println("los dias con pico de lluva son :" +diasPico);
 
+        System.out.println(pronosticos);
 
     }
 
+    private static BigDecimal calcularPerimetro(Coordenada coordenada1, Coordenada coordenada2, Coordenada coordenada3) {
+        BigDecimal lado1 = calcularDistancia(coordenada1, coordenada2);
+        BigDecimal lado2 = calcularDistancia(coordenada2, coordenada3);
+        BigDecimal lado3 = calcularDistancia(coordenada3, coordenada1);
+
+        BigDecimal perimetro = lado1.add(lado2).add(lado3);
+        System.out.println("Perimetro "+perimetro);
+        return perimetro;
+    }
+
+    public static BigDecimal calcularDistancia(Coordenada p1, Coordenada p2) {
+        BigDecimal x1 = p1.getX();
+        BigDecimal y1 = p1.getY();
+        BigDecimal x2 = p2.getX();
+        BigDecimal y2 = p2.getY();
+
+        BigDecimal distanciaX = x2.subtract(x1);
+        BigDecimal distanciaY = y2.subtract(y1);
+
+        return distanciaX.pow(2).add(distanciaY.pow(2)).sqrt(MathContext.DECIMAL128);
+    }
+    private static BigDecimal getPerimetroMaximo() {
+        //Por el teorema de la desigualdad triangular
+        /* a < (b+c) , b<(a+c) , c<(a+b)
+        El valor maximo posible de cada lado es la suma de sus otros dos lados.
+        Considerando al triangulo como 3 triangulos pequeños que incluyen al (0,0)
+         */
+        BigDecimal radio1 = Planeta.Ferengi.getRadio();
+        BigDecimal radio2 = Planeta.Vulcano.getRadio();
+        BigDecimal radio3 = Planeta.Betasoide.getRadio();
+        BigDecimal L = BigDecimal.valueOf(Math.sqrt(radio1.pow(2).add(radio2.pow(2)).add(radio3.pow(2)).doubleValue()));
+        BigDecimal perimetroMaximo = L.multiply(BigDecimal.valueOf(Math.sqrt(3.0)));
+        return perimetroMaximo;
+    }
+
     private static Boolean verificarAlineacion(Coordenada coordenada1, Coordenada coordenada2, Coordenada coordenada3) {
-        final BigDecimal Tolerancia = BigDecimal.valueOf(0.1); // Tolerancia
+
 
         BigDecimal x1 = coordenada1.getX();
         BigDecimal y1 = coordenada1.getY();
@@ -55,7 +136,7 @@ public class pruebas {
         System.out.println(pendiente2);
 
         // Verificamos si las pendientes son aproximadamente iguales.
-        return pendiente1.subtract(pendiente2).abs().compareTo(Tolerancia) == -1;
+        return pendiente1.subtract(pendiente2).abs().compareTo(TOLERANCIA) == -1;
     }
 
     public static boolean elSolEstaDentroDelTriangulo(Coordenada coordenada1, Coordenada coordenada2, Coordenada coordenada3) {
