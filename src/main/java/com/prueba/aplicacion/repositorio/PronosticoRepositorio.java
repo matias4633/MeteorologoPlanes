@@ -1,10 +1,12 @@
-package repositorio;
+package com.prueba.aplicacion.repositorio;
 
-import modelo.Pronostico;
+import com.prueba.aplicacion.modelo.Pronostico;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PronosticoRepositorio extends MongoRepository<Pronostico,String> {
     Pronostico findByFecha(LocalDate fecha);
+
+    List<Pronostico> findByActualEquals(Boolean valor);
 }

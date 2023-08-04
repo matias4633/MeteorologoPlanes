@@ -1,4 +1,4 @@
-package modelo;
+package com.prueba.aplicacion.modelo;
 
 import lombok.*;
 

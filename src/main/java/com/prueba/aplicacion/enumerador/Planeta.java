@@ -1,7 +1,5 @@
-package enumerador;
-import enumerador.SentidoGiro;
+package com.prueba.aplicacion.enumerador;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 

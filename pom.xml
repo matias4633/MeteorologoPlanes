@@ -11,7 +11,7 @@
 	<groupId>com.prueba.abstract</groupId>
 	<artifactId>Tecnica-Abstract</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Tecnica-Abstract</name>
 	<description>Prueba tecnica backend Abstract</description>
 	<properties>
