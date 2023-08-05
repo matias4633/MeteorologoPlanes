@@ -14,8 +14,8 @@ Este repositorio contiene un sistema de pronóstico climático basado en datos d
 3. Abrir una consola en la carpeta raiz del proyecto.
 
 ## Ejecución del Proyecto (Local)
-
-1. Ejecuta la aplicación con docker mediante el comando: `docker-compose up -d`
+1. Construir el JAR con el siguiente comando: `.\mvnw.cmd clean package`
+2. Ejecuta la aplicación con docker mediante el comando: `docker-compose up -d`
 
 No necesita instalar MongoDB, docker ya esta configurado.
 ## Endpoints
