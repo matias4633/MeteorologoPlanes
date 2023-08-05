@@ -1,0 +1,17 @@
+com\prueba\aplicacion\datos\ModeloDatos.class
+com\prueba\aplicacion\modelo\Pronostico.class
+com\prueba\aplicacion\servicio\EstadisticaServicioImpl.class
+com\prueba\aplicacion\modelo\Coordenada.class
+com\prueba\aplicacion\modelo\Estadistica.class
+com\prueba\aplicacion\repositorio\PronosticoRepositorio.class
+com\prueba\aplicacion\repositorio\EstadisticaRepositorio.class
+com\prueba\aplicacion\servicio\EstadisticaServicio.class
+com\prueba\aplicacion\enumerador\SentidoGiro.class
+com\prueba\aplicacion\Diccionario\Pronostico_.class
+com\prueba\aplicacion\TecnicaAbstractApplication.class
+com\prueba\aplicacion\controlador\PronosticoController.class
+com\prueba\aplicacion\servicio\PronosticoServicio.class
+com\prueba\aplicacion\servicio\PronosticoServicioImpl.class
+com\prueba\aplicacion\enumerador\TipoClima.class
+com\prueba\aplicacion\enumerador\Planeta.class
+com\prueba\aplicacion\job\JobPronostico.class
