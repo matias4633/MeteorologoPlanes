@@ -24,8 +24,8 @@ public class ModeloDatos {
     private static final Coordenada SOL = new Coordenada(BigDecimal.ZERO, BigDecimal.ZERO);
     private static final BigDecimal TOLERANCIA = BigDecimal.valueOf(0.1); // Tolerancia
     private static final LocalDate DIA_0 = LocalDate.of(2023, 8, 7);
-    //LO considero el dia cero donde los 3 planetas y sol estan alineados.
-    //Con esto hace el modelo mas real.
+    //LO considero el dia cero(Dia que me dieron la prueba), donde los 3 planetas y sol estan alineados sobre el eje x positivo..
+    //Con esto hace el modelo mas real. De esta forma los calcularos no dependen del dia en donde se ejecute el calculo.
     @Autowired
     private PronosticoServicioImpl pronosticoServicio;
     @Autowired
@@ -46,7 +46,6 @@ public class ModeloDatos {
         Long diasPasados = ChronoUnit.DAYS.between(DIA_0, hoy ) - 1 ;
         LocalDate diaActual = DIA_0.plusDays(diasPasados); //Dias pasados desde el DIA 0.
         List<Pronostico> pronosticos = new ArrayList<>();
-        System.out.println(pronosticoServicio);
         pronosticoServicio.marcarParaActualizacion();
         //Marca los registros anteriores para que en caso de que se reprocese no existan dos pronosticos para la misma fecha.
 
@@ -63,11 +62,12 @@ public class ModeloDatos {
             pronostico.setFecha(diaActual.plusDays(index));
 
             Boolean estanAlineadosEntreSi = verificarAlineacion(coordenada1,coordenada2,coordenada3);
-            Boolean solDentroDelTriangulo = elSolEstaDentroDelTriangulo(coordenada1,coordenada2,coordenada3);
-            Boolean estanAlineadosConElSOl = verificarAlineacion(coordenada1,coordenada2, SOL);
-            BigDecimal perimetro = calcularPerimetro(coordenada1,coordenada2,coordenada3);
+
+
+
 
             if(estanAlineadosEntreSi){
+                Boolean estanAlineadosConElSOl = verificarAlineacion(coordenada1,coordenada2, SOL);
                 if(estanAlineadosConElSOl){
                     //sequia
                     pronostico.setClima(TipoClima.SEQUIA);
@@ -79,9 +79,11 @@ public class ModeloDatos {
                 }
             }else{
                 //forman un triangulo.
+                Boolean solDentroDelTriangulo = elSolEstaDentroDelTriangulo(coordenada1,coordenada2,coordenada3);
                 if(solDentroDelTriangulo){
                     //lluvia , Opt lluvia maxima.
                     //en este caso me importa el perimetro.
+                    BigDecimal perimetro = calcularPerimetro(coordenada1,coordenada2,coordenada3);
                     perimetros.put(diaActual.plusDays(index) , perimetro);
                     pronostico.setClima(TipoClima.LLUVIA);
                     lluvia++;
@@ -121,8 +123,7 @@ public class ModeloDatos {
         estadisticaServicio.saveEstadistica(estadistica);
         pronosticoServicio.insertarDocumentos(pronosticos);
         pronosticoServicio.borrarPronosticosNoActuales();
-        System.out.println(estadistica);
-        System.out.println(pronosticos);
+        System.out.println("Proceso Terminado Correctamente");
     }
 
     /**
@@ -138,7 +139,6 @@ public class ModeloDatos {
         BigDecimal lado3 = calcularDistancia(coordenada3, coordenada1);
 
         BigDecimal perimetro = lado1.add(lado2).add(lado3);
-        System.out.println("Perimetro "+perimetro);
         return perimetro;
     }
 
@@ -181,8 +181,6 @@ public class ModeloDatos {
         //(y2-y1)/(x2-x1) Formula de pendiente.
         BigDecimal pendiente1 = y2.subtract(y1).divide(x2.subtract(x1), MathContext.DECIMAL128).abs();
         BigDecimal pendiente2 = y3.subtract(y1).divide(x3.subtract(x1), MathContext.DECIMAL128).abs();
-        System.out.println(pendiente1);
-        System.out.println(pendiente2);
 
         // Verificamos si las pendientes son aproximadamente iguales.
         return pendiente1.subtract(pendiente2).abs().compareTo(TOLERANCIA) == -1;

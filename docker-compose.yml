@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  sb-app:
+    build: .
+    environment:
+      - SERVER_PORT=8083
+      - MONGODB_URI=mongodb://mongodb:27017/pronosticos
+      - MONGODB_STATUS_HOST=mongodb
+    container_name: "docker-app"
+    ports:
+      - 8083:8083
+    networks:
+      - red1
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - red1
+volumes:
+  mongo-data:
+networks:
+  red1:
+    name: mired
+    external: true

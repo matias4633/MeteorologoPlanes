@@ -40,9 +40,10 @@ public class PronosticoController {
     }
 
     @PostMapping("/proceso/run")
-    public String ejecutarProceso(){
-        datos.correrProcesoPronosticos();
-        return "Proceso Iniciado";
+    public ResponseEntity<String> ejecutarProceso(){
+        datos.correrProcesoPronosticos(); //Este proceso corre en otro hilo, de forma asincrona.
+        String mensaje = "Proceso Iniciado";
+        return ResponseEntity.ok(mensaje);
     }
 
 }
