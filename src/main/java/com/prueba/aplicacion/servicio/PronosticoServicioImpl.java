@@ -1,5 +1,6 @@
 package com.prueba.aplicacion.servicio;
 
+import com.prueba.aplicacion.enumerador.TipoClima;
 import com.prueba.aplicacion.modelo.Pronostico;
 import com.prueba.aplicacion.repositorio.PronosticoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +39,16 @@ public class PronosticoServicioImpl implements PronosticoServicio{
         repositorio.saveAll(documentosParaInsertar);
     }
 
-  /*  public void marcarParaActualizacionBulk() {
-        Query query = new Query();
-        Update update = new Update();
-        update.set(Pronostico_.ACTUAL, false);
-        BulkOperations bulkOps = mongoOperations.bulkOps(BulkMode.UNORDERED, Pronostico.class);
-        bulkOps.updateMulti(query, update);
-        bulkOps.execute();
-    }*/
     public void marcarParaActualizacion(){
         List<Pronostico> pronosticos = repositorio.findAll();
         for (Pronostico p :pronosticos) {
             p.setActual(false);
         }
         repositorio.saveAll(pronosticos);
+    }
+    @Override
+    public List<Pronostico> getPorClima(TipoClima clima) {
+        return repositorio.findByClimaEquals(clima);
     }
 
     public void borrarPronosticosNoActuales() {

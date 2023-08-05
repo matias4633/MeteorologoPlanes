@@ -26,9 +26,7 @@ public class ModeloDatos {
     private static final LocalDate DIA_0 = LocalDate.of(2023, 8, 7);
     //LO considero el dia cero(Dia que me dieron la prueba), donde los 3 planetas y sol estan alineados sobre el eje x positivo..
     //Con esto hace el modelo mas real. De esta forma los calcularos no dependen del dia en donde se ejecute el calculo.
-    @Autowired
     private PronosticoServicioImpl pronosticoServicio;
-    @Autowired
     private EstadisticaServicioImpl estadisticaServicio;
     @Autowired
     public ModeloDatos(PronosticoServicioImpl pronosticoServicio, EstadisticaServicioImpl estadisticaServicio) {
@@ -60,6 +58,7 @@ public class ModeloDatos {
             Coordenada coordenada3 = getCoordenada(Planeta.Vulcano , BigDecimal.valueOf(diasPasados+index));
             Pronostico pronostico = new Pronostico();
             pronostico.setFecha(diaActual.plusDays(index));
+            pronostico.setActual(true);
 
             Boolean estanAlineadosEntreSi = verificarAlineacion(coordenada1,coordenada2,coordenada3);
 

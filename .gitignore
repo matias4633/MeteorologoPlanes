@@ -22,6 +22,7 @@ HELP.md
 /nbbuild/
 /dist/
 /nbdist/
+/out/
 /.nb-gradle/
 build/
 !**/src/main/**/build/

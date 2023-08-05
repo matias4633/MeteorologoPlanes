@@ -1,5 +1,6 @@
 package com.prueba.aplicacion.servicio;
 
+import com.prueba.aplicacion.enumerador.TipoClima;
 import com.prueba.aplicacion.modelo.Pronostico;
 
 import java.time.LocalDate;
@@ -15,6 +16,8 @@ public interface PronosticoServicio {
     //void marcarParaActualizacionBulk();
 
     void marcarParaActualizacion();
+
+    List<Pronostico> getPorClima(TipoClima clima);
 
     void borrarPronosticosNoActuales();
 }

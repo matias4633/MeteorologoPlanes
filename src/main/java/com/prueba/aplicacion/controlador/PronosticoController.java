@@ -1,6 +1,8 @@
 package com.prueba.aplicacion.controlador;
 
 import com.prueba.aplicacion.datos.ModeloDatos;
+import com.prueba.aplicacion.enumerador.TipoClima;
+import com.prueba.aplicacion.excepciones.NoEncontradoException;
 import com.prueba.aplicacion.modelo.Estadistica;
 import com.prueba.aplicacion.modelo.Pronostico;
 import com.prueba.aplicacion.servicio.EstadisticaServicio;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,12 +34,29 @@ public class PronosticoController {
         if(fecha != null){
             pronostico = pronosticoServicio.getPronostico(fecha);
         }
-        return ResponseEntity.ok(pronostico.orElse(new Pronostico()));
+        if(!pronostico.isPresent()){
+            throw new NoEncontradoException("No se encontro un pronostico para la fecha solicitada");
+        }
+        return ResponseEntity.ok(pronostico.get());
+    }
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Pronostico>> getPronosticoPorFecha(@RequestParam String clima){
+        List<Pronostico> pronosticos = null;
+        if(!clima.isEmpty()){
+            pronosticos = pronosticoServicio.getPorClima(TipoClima.valueOf(clima));
+        }
+        if(pronosticos.isEmpty()){
+            throw new NoEncontradoException("No se encontro pronosticos para el clima solicitado");
+        }
+        return ResponseEntity.ok(pronosticos);
     }
     @GetMapping("/estadistica")
     public ResponseEntity<Estadistica> getUltimaEstadistica(){
         Optional<Estadistica> ultimaEstadistica = estadisticaServicio.getUltimaEstadistica();
-        return ResponseEntity.ok(ultimaEstadistica.orElse(new Estadistica()));
+        if(!ultimaEstadistica.isPresent()){
+            throw new NoEncontradoException("No se encontro un registro estadistica.");
+        }
+        return ResponseEntity.ok(ultimaEstadistica.get());
     }
 
     @PostMapping("/proceso/run")
