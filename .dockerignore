@@ -1,0 +1,5 @@
+# Excluir archivos y directorios específicos de Spring Boot
+build/
+*.class
+*.log
+*.jar
