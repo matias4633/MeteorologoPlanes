@@ -14,8 +14,8 @@ Este repositorio contiene un sistema de pronóstico climático basado en datos d
 3. Abrir una consola en la carpeta raiz del proyecto.
 
 ## Ejecución del Proyecto (Local)
-1. Construir el JAR con el siguiente comando: `.\mvnw.cmd clean package`
-2. Ejecuta la aplicación con docker mediante el comando: `docker-compose up -d`
+
+1. Ejecuta la aplicación con docker mediante el comando: `docker-compose up -d`
 
 No necesita instalar MongoDB, docker ya esta configurado.
 ## Endpoints
@@ -46,9 +46,6 @@ GET https://meteorologo.fly.dev/pronostico?fecha=2024-02-14
 
 **Endpoint:** `GET /estadistica`
 
-**Parámetros:**
-- `fecha`: Fecha en formato `YYYY-MM-DD`.
-
 **Ejemplo de Uso:**
 ```http
 GET https://meteorologo.fly.dev/pronostico/estadistica
@@ -64,6 +61,36 @@ GET https://meteorologo.fly.dev/pronostico/estadistica
     "condicionesOptimas": 2404,
     "fechaActualizacion": "2023-08-05T19:37:15.99"
 }
+```
+
+### 3. Obtener una lista buscando por clima.
+
+**Endpoint:** `GET /buscar`
+
+**Parámetros:**
+- `clima`: `MAXIMA_LLUVIA`.
+
+**OPCIONES**
+    SEQUIA, LLUVIA, MAXIMA_LLUVIA , CONDICIONES_OPTIMAS
+
+**Ejemplo de Uso:**
+```http
+GET https://meteorologo.fly.dev/pronostico/buscar?clima=MAXIMA_LLUVIA
+```
+
+
+**Respuesta:**
+```json
+[
+    {
+        "clima": "MAXIMA_LLUVIA",
+        "fecha": "2023-10-18"
+    },
+    {
+        "clima": "MAXIMA_LLUVIA",
+        "fecha": "2023-11-23"
+    }
+]
 ```
 
 **El proceso de calculo se ejecuta automaticamente cada cierto tiempo.**
