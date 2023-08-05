@@ -1,7 +1,0 @@
-server:
-  port: 8080
-spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://matiasbasilotta:7gEgCD5FhZxRftDw@matiasmongo.1njl6vh.mongodb.net/?retryWrites=true&w=majority
-      database: pronosticos
