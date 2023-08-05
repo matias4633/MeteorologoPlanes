@@ -40,7 +40,7 @@ public class PronosticoController {
         return ResponseEntity.ok(pronostico.get());
     }
     @GetMapping("/buscar")
-    public ResponseEntity<List<Pronostico>> getPronosticoPorFecha(@RequestParam String clima){
+    public ResponseEntity<List<Pronostico>> getPronosticoPorClima(@RequestParam String clima){
         List<Pronostico> pronosticos = null;
         if(!clima.isEmpty()){
             pronosticos = pronosticoServicio.getPorClima(TipoClima.valueOf(clima));
