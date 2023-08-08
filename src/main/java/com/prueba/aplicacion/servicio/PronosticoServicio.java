@@ -13,7 +13,6 @@ public interface PronosticoServicio {
     Pronostico savePronostico(Pronostico pronostico);
 
     void insertarDocumentos(List<Pronostico> documentosParaInsertar);
-    //void marcarParaActualizacionBulk();
 
     void marcarParaActualizacion();
 
