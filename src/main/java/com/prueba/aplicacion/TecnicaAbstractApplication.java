@@ -15,7 +15,7 @@ public class TecnicaAbstractApplication {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(TecnicaAbstractApplication.class);
 		String port = System.getenv("PORT");
-		app.setDefaultProperties(Collections.singletonMap("server.port", port == null ? "8080" : port));
+		app.setDefaultProperties(Collections.singletonMap("server.port", port == null ? "80" : port));
 		app.run(args);
 	}
 
