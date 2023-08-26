@@ -14,12 +14,6 @@ import java.util.Optional;
 public class PronosticoServicioImpl implements PronosticoServicio{
     @Autowired
     private PronosticoRepositorio repositorio;
-    /*@Autowired
-    private final MongoOperations mongoOperations;
-    @Autowired
-    public PronosticoServicioImpl(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
-    }*/
 
     public PronosticoServicioImpl() {
 

@@ -18,7 +18,7 @@ Este repositorio contiene un sistema de pronóstico climático basado en datos d
 1. Ejecuta la aplicación con docker mediante el comando: `docker-compose up -d`
 
 No necesita instalar MongoDB, docker ya esta configurado.
-## Endpoints
+## Endpoints (DEPLOY DETENIDO)
 
 La API proporciona los siguientes endpoints:
 
